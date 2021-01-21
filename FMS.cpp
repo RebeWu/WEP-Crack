@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
-int keysize;//ÃÜÂë³¤¶È
-int stat[256];//×´Ì¬Êı×é
+int keysize;//å¯†ç é•¿åº¦
+int stat[256];//çŠ¶æ€æ•°ç»„
 // 802.2 SNAP Header should be 1st plaintext byte of WEP packet
 int text[] = {0xaa};
 int S[256];
@@ -13,25 +13,20 @@ vector <Q>IVList;
 #define xx first
 #define yy second
 void RecoverWEPkey(){
-for (int B=0; B < keysize; B++) {//Ã¶¾ÙÃÜÂëÎ»
-
-	// ³õÊ¼»¯×´Ì¬Êı×é
+for (int B=0; B < keysize; B++) {//æšä¸¾å¯†ç ä½
+	// åˆå§‹åŒ–çŠ¶æ€æ•°ç»„
 	for (i=0; i < 256; i++) {
 		 stat[i]=0;
 	}
-
 	for(i=0;i<IVList.size();i++) {
 	    Q IVRec=IVList[i];
 		 key[0]=IVRec.xx.xx;
 		 key[1]=IVRec.xx.yy;
 		 key[2]=IVRec.yy.xx;
-		//IVµÄÈı¸öÖµ
+		//IVçš„ä¸‰ä¸ªå€¼
         int  encr=IVRec.yy.yy;
-        //ÃÜÎÄµÄµÚÒ»Î»
-
-//		if (key[0] ==  B+3) {
-
-//ÕÒµ½µÚÒ»¸öKEY×Ö½Ú¶ÔÓ¦µÄIV
+        //å¯†æ–‡çš„ç¬¬ä¸€ä½
+//æ‰¾åˆ°ç¬¬ä¸€ä¸ªKEYå­—èŠ‚å¯¹åº”çš„IV
 
 			for (i=0; i<256;i++) {
 				S[i]=i;
@@ -49,8 +44,6 @@ for (int B=0; B < keysize; B++) {//Ã¶¾ÙÃÜÂëÎ»
 				}
 
 			}
-
-
 			int  X=S[1];
 			if (X < B + 3) {
 				if (X+S[X] ==B + 3) {
@@ -58,17 +51,13 @@ for (int B=0; B < keysize; B++) {//Ã¶¾ÙÃÜÂëÎ»
 						//print("Throwaway IV   IV[0]=%d,  IV[1]=%d,   IV[2]=%d\n",IV[0],IV[1],IV[2]);
 					}
 
-//Êı¾İ°üµÄµÚÒ»¸ö¼ÓÃÜ×Ö½ÚÎªRC4Ëã·¨²úÉúµÄµÚÒ»¸ö×Ö½Ú
-//ºÍLLCÍ·µÄµÚÒ»¸ö×Ö½Ú£¨0xaa£©¼ÓÃÜ£¨×öÒì»ò²Ù×÷£©µÄ½á¹û
-                    int  S3Calc = encr ^ text[0];//µÃµ½RC4Ëã·¨²úÉúµÄµÚÒ»¸ö×Ö½Ú
+//æ•°æ®åŒ…çš„ç¬¬ä¸€ä¸ªåŠ å¯†å­—èŠ‚ä¸ºRC4ç®—æ³•äº§ç”Ÿçš„ç¬¬ä¸€ä¸ªå­—èŠ‚
+//å’ŒLLCå¤´çš„ç¬¬ä¸€ä¸ªå­—èŠ‚ï¼ˆ0xaaï¼‰åŠ å¯†ï¼ˆåšå¼‚æˆ–æ“ä½œï¼‰çš„ç»“æœ
+                    int  S3Calc = encr ^ text[0];//å¾—åˆ°RC4ç®—æ³•äº§ç”Ÿçš„ç¬¬ä¸€ä¸ªå­—èŠ‚
 					int  leaker = S3Calc-j-S[i] %256;//
 					stat[leaker]++;
 				}
 			}
-
-
-
-
 //}
 }
 	int  max=0;
@@ -103,10 +92,10 @@ void IV_read()
 
 }
 int main(void){
-    //¶ÁÈëÎÄ¼ş
-    //¸ñÊ½£º
-    //Ã¿¸öÊı¾İ°üÒ»ĞĞ£¬°üÀ¨IVµÄÈı¸öÊı£¬ÒÔ¼°ÃÜÎÄµÄµÚÒ»¸öÊı£¬Ò»¹²ËÄ¸öÊı£¬ÓÃ¿Õ¸ñ¸ô¿ª
-    //ÎÄ¼şÃûÊÇIV.in
+    //è¯»å…¥æ–‡ä»¶
+    //æ ¼å¼ï¼š
+    //æ¯ä¸ªæ•°æ®åŒ…ä¸€è¡Œï¼ŒåŒ…æ‹¬IVçš„ä¸‰ä¸ªæ•°ï¼Œä»¥åŠå¯†æ–‡çš„ç¬¬ä¸€ä¸ªæ•°ï¼Œä¸€å…±å››ä¸ªæ•°ï¼Œç”¨ç©ºæ ¼éš”å¼€
+    //æ–‡ä»¶åæ˜¯IV.in
     IV_read();
     RecoverWEPkey();
 return 0;
